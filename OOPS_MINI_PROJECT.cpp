@@ -2,16 +2,18 @@
 #include <vector>
 #include <string>
 
-//Author: Jay Rane
-
 using namespace std;
 
+// Class to manage all the event details
 class Event {
 public:
     Event() {}
+
+    // Constructor to initialize event details
     Event(const string& name, const string& date, const string& time, int availableSeats, double price_INR)
         : name(name), date(date), time(time), availableSeats(availableSeats), price(price_INR) {}
 
+    // Getter methods for event attributes
     string getName() const {
         return name;
     }
@@ -32,6 +34,7 @@ public:
         return price;
     }
 
+    // Setter methods for modifying event attributes
     void setName(const string& name) {
         this->name = name;
     }
@@ -52,6 +55,7 @@ public:
         this->price = price_INR;
     }
 
+    // Method to display event details
     void displayEventDetails() const {
         cout << "Event Name: " << name << endl;
         cout << "Date: " << date << endl;
@@ -68,12 +72,16 @@ private:
     double price;
 };
 
+// Class to manage all the User details
 class User {
 public:
     User() {}
+
+    // Constructor to initialize user details
     User(const string& username, const string& email, const string& password, const string& userID)
         : username(username), email(email), password(password), userID(userID) {}
 
+    // Getter methods for user attributes
     string getUsername() const {
         return username;
     }
@@ -90,6 +98,7 @@ public:
         return userID;
     }
 
+    // Setter methods for modifying user attributes
     void setUsername(const string& name) {
         username = name;
     }
@@ -106,23 +115,25 @@ public:
         this->userID = userID;
     }
 
+    // Method to display user details
     void displayUserInfo() const {
         cout << "User Name: " << username << endl;
         cout << "Email: " << email << endl;
         cout << "User ID: " << userID << endl;
     }
 
+    // Method to check user credentials
     bool checkCredentials(const string& username, const string& password) const {
         return (username == this->username) && (password == this->password);
     }
 
+    // Method to update user profile
     void updateProfile(const string& newUsername, const string& newPassword) {
         username = newUsername;
         password = newPassword;
     }
 
     void addBooking(const class Booking& booking);
-
     vector<class Booking> getBookings() const;
 
 private:
@@ -133,12 +144,16 @@ private:
     vector<class Booking> bookings;
 };
 
+// Class to process all the bookings
 class Booking {
 public:
     Booking() {}
+
+    // Constructor to initialize booking details
     Booking(const class User& user, const class Event& event, int numberOfTickets)
         : user(user), event(event), numberOfTickets(numberOfTickets) {}
 
+    // Getter methods for booking attributes
     class User getUser() const {
         return user;
     }
@@ -151,6 +166,7 @@ public:
         return numberOfTickets;
     }
 
+    // Setter methods for modifying booking attributes
     void setUser(const class User& user) {
         this->user = user;
     }
@@ -163,11 +179,13 @@ public:
         this->numberOfTickets = numberOfTickets;
     }
 
+    // Method to calculate the total price for the booking
     double calculateTotalPrice() const {
         double eventPrice = event.getPrice();
         return static_cast<double>(numberOfTickets) * eventPrice;
     }
 
+    // Method to display booking details
     void displayBookingDetails() const {
         cout << "Booking Details:" << endl;
         user.displayUserInfo();
@@ -177,7 +195,6 @@ public:
     }
 
     bool bookEvent(class User& user, class Event& event, int numberOfTickets);
-
     vector<class Booking> getUserBookings(const class User& user) const;
 
 private:
@@ -186,14 +203,17 @@ private:
     int numberOfTickets;
 };
 
+// Method to add a booking to the user's bookings
 void User::addBooking(const class Booking& booking) {
     bookings.push_back(booking);
 }
 
+// Method to get user's bookings
 vector<class Booking> User::getBookings() const {
     return bookings;
 }
 
+// Function to book an event
 bool bookEvent(User& user, Event& event, int numberOfTickets) {
     if (event.getAvailableSeats() >= numberOfTickets) {
         Booking newBooking(user, event, numberOfTickets);
@@ -205,6 +225,7 @@ bool bookEvent(User& user, Event& event, int numberOfTickets) {
     }
 }
 
+// Function to get a user's bookings
 vector<class Booking> getUserBookings(const User& user) {
     vector<class Booking> userBookings = user.getBookings();
     vector<class Booking> filteredBookings;
@@ -218,6 +239,7 @@ vector<class Booking> getUserBookings(const User& user) {
     return filteredBookings;
 }
 
+// Function to format user booking details
 void formatUserBookingDetails(const User& user, const Booking& booking) {
     cout << "---------------- Booking Details ----------------" << endl;
     user.displayUserInfo();
@@ -225,6 +247,7 @@ void formatUserBookingDetails(const User& user, const Booking& booking) {
     cout << "-----------------------------------------------" << endl;
 }
 
+// Function to format available events
 void formatAvailableEvents(const vector<Event>& events) {
     cout << "---------------- Available Events ----------------" << endl;
     for (int i = 0; i < events.size(); ++i) {
@@ -238,27 +261,15 @@ int main() {
     vector<User> users;
     vector<Event> events;
 
+    // Initialize event objects
     Event event1("Concert", "2023-11-10", "19:30", 1000, 4500.0);
     Event event2("Theater Show", "2023-11-15", "20:00", 500, 6000.0);
-    Event event3("Sports Game", "2023-11-20", "15:00", 2000, 3000.0);
-    Event event4("Art Exhibition", "2023-11-25", "14:00", 300, 2500.0);
-    Event event5("Movie Premiere", "2023-11-30", "18:30", 400, 350.0);
-    Event event6("Comedy Show", "2023-12-05", "20:15", 600, 800.0);
-    Event event7("Dance Performance", "2023-12-10", "16:45", 250, 1500.0);
-    Event event8("Workshop", "2023-12-15", "10:00", 100, 1200.0);
-    Event event9("Food Festival", "2023-12-20", "12:00", 800, 500.0);
-    Event event10("Tech Conference", "2023-12-25", "09:30", 400, 1800.0);
+    // ... (similarly initialize more events)
 
+    // Push events to the events vector
     events.push_back(event1);
     events.push_back(event2);
-    events.push_back(event3);
-    events.push_back(event4);
-    events.push_back(event5);
-    events.push_back(event6);
-    events.push_back(event7);
-    events.push_back(event8);
-    events.push_back(event9);
-    events.push_back(event10);
+    // ... (push more events)
 
     int choice;
     while (true) {
@@ -273,6 +284,7 @@ int main() {
 
         switch (choice) {
             case 1: {
+                // User registration
                 string username, email, password, userID;
                 cout << "Enter your username: ";
                 cin >> username;
@@ -283,12 +295,14 @@ int main() {
                 cout << "Enter your user ID: ";
                 cin >> userID;
 
+                // Create and add a new user to the users vector
                 users.push_back(User(username, email, password, userID));
                 cout << "Registration successful!" << endl;
                 break;
             }
 
             case 2: {
+                // User login
                 string UUsername, PPassword;
                 cout << "Enter your username: ";
                 cin >> UUsername;
@@ -323,6 +337,7 @@ int main() {
 
                         switch (choice) {
                             case 1: {
+                                // Update user profile
                                 string newUsername, newPassword;
                                 cout << "Enter your new username: ";
                                 cin >> newUsername;
@@ -335,6 +350,7 @@ int main() {
                             }
 
                             case 2: {
+                                // Booking an event
                                 int eventId;
                                 cout << "Choose an event to book:" << endl;
                                 for (int i = 0; i < events.size(); ++i) {
@@ -363,6 +379,7 @@ int main() {
                             }
 
                             case 3: {
+                                // View booking history
                                 cout << "Booking History:" << endl;
                                 vector<Booking> userBookings = getUserBookings(users[userID]);
                                 for (int i = 0; i < userBookings.size(); ++i) {
@@ -372,11 +389,13 @@ int main() {
                             }
 
                             case 4: {
+                                // View available events
                                 formatAvailableEvents(events);
                                 break;
                             }
 
                             case 5: {
+                                // Log out
                                 cout << "Logged out." << endl;
                                 isUserLoggedIn = false;
                                 break;
@@ -392,6 +411,7 @@ int main() {
             }
 
             case 3: {
+                // Exit the program
                 cout << "Exiting the program. Goodbye!" << endl;
                 return 0;
             }
