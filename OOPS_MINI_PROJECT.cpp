@@ -264,11 +264,27 @@ int main() {
     // Initialize event objects
     Event event1("Concert", "2023-11-10", "19:30", 1000, 4500.0);
     Event event2("Theater Show", "2023-11-15", "20:00", 500, 6000.0);
+    Event event3("Sports Game", "2023-11-20", "15:00", 2000, 3000.0);
+    Event event4("Art Exhibition", "2023-11-25", "14:00", 300, 2500.0);
+    Event event5("Movie Premiere", "2023-11-30", "18:30", 400, 350.0);
+    Event event6("Comedy Show", "2023-12-05", "20:15", 600, 800.0);
+    Event event7("Dance Performance", "2023-12-10", "16:45", 250, 1500.0);
+    Event event8("Workshop", "2023-12-15", "10:00", 100, 1200.0);
+    Event event9("Food Festival", "2023-12-20", "12:00", 800, 500.0);
+    Event event10("Tech Conference", "2023-12-25", "09:30", 400, 1800.0);
     // ... (similarly initialize more events)
 
     // Push events to the events vector
     events.push_back(event1);
     events.push_back(event2);
+    events.push_back(event3);
+    events.push_back(event4);
+    events.push_back(event5);
+    events.push_back(event6);
+    events.push_back(event7);
+    events.push_back(event8);
+    events.push_back(event9);
+    events.push_back(event10);
     // ... (push more events)
 
     int choice;
