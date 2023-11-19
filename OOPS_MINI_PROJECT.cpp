@@ -119,7 +119,7 @@ public:
     }
 
     static void getUsers(const vector<User>& users,const int& UserID){
-        cout << "|   " << UserID << "   |   " << users[UserID].getUsername() << "   |   " << users[UserID].getEmail() << "   |" << endl;
+        cout << "|   " << users[UserID].getUserID() << "   |   " << users[UserID].getUsername() << "   |   " << users[UserID].getEmail() << "   |" << endl;
     }
 
     // Method to display user details
