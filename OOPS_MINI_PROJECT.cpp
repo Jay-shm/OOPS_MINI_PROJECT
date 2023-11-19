@@ -4,6 +4,7 @@
 
 using namespace std;
 
+
 // Class to manage all the event details
 class Event {
 public:
@@ -77,6 +78,8 @@ class User {
 public:
     User() {}
 
+    User(const string& username, const string& password)
+        : username(username), password(password) {}
     // Constructor to initialize user details
     User(const string& username, const string& email, const string& password, const string& userID)
         : username(username), email(email), password(password), userID(userID) {}
@@ -115,12 +118,20 @@ public:
         this->userID = userID;
     }
 
+    static void getUsers(const vector<User>& users,const int& UserID){
+        cout << "|   " << UserID << "   |   " << users[UserID].getUsername() << "   |   " << users[UserID].getEmail() << "   |" << endl;
+    }
+
     // Method to display user details
     void displayUserInfo() const {
         cout << "User Name: " << username << endl;
         cout << "Email: " << email << endl;
         cout << "User ID: " << userID << endl;
     }
+    
+    bool checkadmin(const string& username, const string& password) {
+		return (username == "Admin") && (password == "Admin");    	
+	}
 
     // Method to check user credentials
     bool checkCredentials(const string& username, const string& password) const {
@@ -257,9 +268,71 @@ void formatAvailableEvents(const vector<Event>& events) {
     }
 }
 
+void createNewEvent(vector<Event>& events) {
+    string name, date, time;
+    int availableSeats;
+    double price;
+
+    cout << "Enter event name: ";
+    cin.ignore(); // Ignore any remaining newline characters in the input buffer
+    getline(cin, name);
+
+    cout << "Enter event date (YYYY-MM-DD): ";
+    cin >> date;
+
+    cout << "Enter event time (HH:MM): ";
+    cin >> time;
+
+    cout << "Enter available seats: ";
+    cin >> availableSeats;
+
+    cout << "Enter event price: ";
+    cin >> price;
+
+    // Create a new Event object with the provided details
+    Event newEvent(name, date, time, availableSeats, price);
+
+    // Add the new event to the events vector
+    events.push_back(newEvent);
+
+    cout << "New event added successfully!" << endl;
+}
+
+void checkUserBookings(const vector<User>& users) {
+    string UID;
+    cout << "Enter UserID To check Bookings: ";
+    cin >> UID;
+
+    bool userExists = false;
+    for (const auto& user : users) {
+        if (user.getUserID() == UID) {
+            userExists = true;
+            vector<Booking> userBookings = getUserBookings(user);
+            if (userBookings.empty()) {
+                cout << "No bookings found for this user." << endl;
+            } else {
+                cout << "Bookings for User " << user.getUsername() << ":" << endl;
+                for (const auto& booking : userBookings) {
+                    formatUserBookingDetails(user, booking);
+                }
+            }
+            break;
+        }
+    }
+
+    if (!userExists) {
+        cout << "User with UserID " << UID << " does not exist." << endl;
+    }
+}
+
+
+
 int main() {
     vector<User> users;
     vector<Event> events;
+
+    User admin("Admin","Admin");
+    users.push_back(admin);
 
     // Initialize event objects
     Event event1("Concert", "2023-11-10", "19:30", 1000, 4500.0);
@@ -294,7 +367,8 @@ int main() {
         cout << "----------------------------------------------------" << endl;
         cout << "1. Register as a new user" << endl;
         cout << "2. Log in" << endl;
-        cout << "3. Exit" << endl;
+        cout << "3. Log in as Admin" << endl;
+        cout << "4. Exit" << endl;
         cout << "Enter your choice: ";
         cin >> choice;
 
@@ -324,9 +398,11 @@ int main() {
                 cin >> UUsername;
                 cout << "Enter your password: ";
                 cin >> PPassword;
+                
+                
 
                 int loggedInUserID = -1;
-                for (int i = 0; i < users.size(); ++i) {
+                for (int i = 1; i < users.size(); ++i) {
                     if (users[i].checkCredentials(UUsername, PPassword)) {
                         loggedInUserID = i;
                         break;
@@ -427,6 +503,92 @@ int main() {
             }
 
             case 3: {
+                string UUsername, PPassword;
+                cout << "Enter your admin username: ";
+                cin >> UUsername;
+                cout << "Enter your admin password: ";
+                cin >> PPassword;
+
+                if (admin.checkadmin(UUsername, PPassword)) {
+                    cout << "Admin login successful!" << endl;
+                    int UserID = 0;
+                    // Display admin menu or perform admin-related tasks
+                    int userID = 0;
+                    bool isUserLoggedIn = true;
+
+                    while (isUserLoggedIn) {
+                        cout << "----------------------------------------------------" << endl;
+                        cout << "           Welcome, " << users[userID].getUsername() << "!" << endl;
+                        cout << "----------------------------------------------------" << endl;
+                        cout << "1. Check All the Users" << endl;
+                        cout << "2. Check User Bookings" << endl;
+                        cout << "3. Enter New Event" << endl;
+                        cout << "4. Delete Event" << endl; // New Option to Delete Event
+                        cout << "5. Log out" << endl;
+                        cout << "Enter your choice: ";
+                        cin >> choice;
+
+                        switch(choice) {
+                            case 1: {
+                                // Display all users
+                                cout << "-----------------------------------------" << endl;
+                                cout << "|   UserID   |   Username   |   Email   |" << endl;
+                                cout << "-----------------------------------------" << endl;
+                                for(int i = 1; i < users.size(); i++) {
+                                    User::getUsers(users, i);
+                                }
+                                break;
+                            }
+
+                            case 2: {
+                                // Check user bookings
+                                checkUserBookings(users);
+                                break;
+                            }
+
+                            case 3: {
+                                // Create a new event
+                                createNewEvent(events);
+                                break;
+                            }
+
+                            case 4: {
+                                // Delete an event
+                                int eventID;
+                                cout << "Enter the event number to delete: ";
+                                cin >> eventID;
+                                eventID--;
+
+                                if (eventID >= 0 && eventID < events.size()) {
+                                    events.erase(events.begin() + eventID);
+                                    cout << "Event deleted successfully!" << endl;
+                                } else {
+                                    cout << "Invalid event number. Please try again." << endl;
+                                }
+                                break;
+                            }
+
+                            case 5: {
+                                // Log out
+                                cout << "Logged out." << endl;
+                                isUserLoggedIn = false;
+                                break;
+                            }
+
+                            default: {
+                                cout << "Invalid choice. Please try again." << endl;
+                                break;
+                            }
+                        }
+                    }
+
+                } else {
+                    cout << "Invalid admin username or admin password. Please try again." << endl;
+                }
+                break; // Ensure to include break after each case statement
+            }
+
+            case 4: {
                 // Exit the program
                 cout << "Exiting the program. Goodbye!" << endl;
                 return 0;
